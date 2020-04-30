@@ -1,5 +1,3 @@
-variable default_tags {
-    type = map
-}
+variable default_tags {}
 variable bucket_name {}
 

@@ -9,5 +9,10 @@ resource "aws_s3_bucket" "bucket" {
       }
     }
   }
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      "Name" = var.bucket_name
+    },
+  )
 }
