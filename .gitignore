@@ -1,0 +1,7 @@
+.terraform/
+.terraform.tfstate*
+terraform.tfstate*
+modules/**/*.auto.tfvars*
+cluster-state.tfvars
+.terragrunt-cache
+.env*
