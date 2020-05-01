@@ -14,5 +14,5 @@ variable aws_region {}
 
 variable repo_name {}
 
-variable repo_project {}
+variable repo_stage {}
 
