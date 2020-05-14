@@ -1,13 +1,13 @@
 resource "aws_codepipeline" "codepipeline" {
   name     = "tf-test-pipeline"
-  role_arn = "${aws_iam_role.codepipeline_role.arn}"
+  role_arn = aws_iam_role.codepipeline.arn
 
   artifact_store {
-    location = "${aws_s3_bucket.codepipeline_bucket.bucket}"
+    location = aws_s3_bucket.artifacts.bucket
     type     = "S3"
 
     encryption_key {
-      id   = "${data.aws_kms_alias.s3kmskey.arn}"
+      id   = data.aws_kms_alias.s3kmskey.arn
       type = "KMS"
     }
   }
@@ -18,15 +18,15 @@ resource "aws_codepipeline" "codepipeline" {
     action {
       name             = "Source"
       category         = "Source"
-      owner            = "ThirdParty"
-      provider         = "GitHub"
+      owner            = "AWS"
+      provider         = "CodeCommit"
       version          = "1"
       output_artifacts = ["source_output"]
 
       configuration = {
-        Owner  = "my-organization"
-        Repo   = "test"
-        Branch = "master"
+        RepositoryName   = aws_codecommit_repository.repo.repository_id
+        BranchName = "master"
+        PollForSourceChanges = true
       }
     }
   }
@@ -35,7 +35,7 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Build"
 
     action {
-      name             = "Build"
+      name             = "Plan"
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
@@ -44,7 +44,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "test"
+        ProjectName = aws_codebuild_project.plan.id
       }
     }
   }

@@ -1,7 +1,7 @@
 # codepipeline artifact s3 bucket
 
-resource "aws_s3_bucket" "bucket" {
-  bucket = var.codepipeline_artifact_bucket_name
+resource "aws_s3_bucket" "artifacts" {
+  bucket = var.artifact_bucket_name
 
   versioning {
     enabled = true
@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "bucket" {
   tags = merge(
     var.default_tags,
     {
-      "Name" = "${var.codepipeline_artifact_bucket_name}-bucket"
+      "Name" = "${var.artifact_bucket_name}-bucket"
     },
   )
 }
